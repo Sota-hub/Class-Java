@@ -6,44 +6,51 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Converter {
 
 	public static void main(String[] args) throws IOException {
 		
-//		make you choose the currency with number
+//		Make you choose the currency by number
 		HashMap<Integer, String> currencyCode = new HashMap<Integer, String>();
 
-		
+//		Create the list
 		currencyCode.put(1, "USD");
 		currencyCode.put(2, "CAD");
 		currencyCode.put(3, "EUR");
+		currencyCode.put(4, "JPY");
 		
+//		Get user inputs
 		Scanner scanner = new Scanner(System.in);
 		
-		System.out.println("Currency Converter");
+		System.out.println("Currency Converter\n");
 		
+//		Choose which country's currency convert from
 		System.out.println("Convert FROM");
-		System.out.println("1: USD\t2:CAD\t3: EUR");
+		System.out.println("1: USD\t2:CAD\t3: EUR\t4: JPY");
 		String from = currencyCode.get(scanner.nextInt());
 		
+//		Choose which country's currency convert to
 		System.out.println("Convert TO");
-		System.out.println("1: USD\t2: CAD\t3: EUR");
+		System.out.println("1: USD\t2: CAD\t3: EUR\t4: JPY");
 		String to = currencyCode.get(scanner.nextInt());
 		
+//		Choose how much money you convert
 		System.out.println("Amount");
 		double amount = scanner.nextFloat();
 		
+//		Execute sendRequest
 		sendRequest(from, to, amount);
 	}
 	
 	public static void sendRequest(String from, String to, double amount) throws IOException {
 		
+//		
 		URL url = new URL("https://free.currconv.com/api/v7/convert?q=" + from + "_" + to + "&compact=ultra&apiKey=b453fee223d5a7dbf708");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
+		connection.connect();
 		int responseOriginal = connection.getResponseCode(); 
 		
 		if (responseOriginal == HttpURLConnection.HTTP_OK) {
@@ -56,17 +63,9 @@ public class Converter {
 			} reader.close();
 			
 			JSONObject object = new JSONObject(response.toString());
-			System.out.println(object);
-//			JSONObject o = object.getJSONObject(from + "_" + to);
+			Double rate = object.getDouble(from + "_" + to);
 			
-			JSONArray rate = object.getJSONArray("USD_CAD");
-			for(int i = 0; i < rate.length(); i++) {
-				System.out.println(rate.getString(i));
-			}
-//			System.out.println(rate);
-//			System.out.println(amount + from + "=" + amount / rate + to);
-			
-			System.out.println(response);
+			System.out.println(amount + from + " = " + amount * rate + to);
 			
 		} else {
 			System.out.println("Something went wrong!");
