@@ -21,7 +21,7 @@ public class EmployeeDAOMySQLImp implements EmployeeDAO {
 	private static final String DELETE_COMMAND = "DELETE FROM employees_tbl WHERE id=?";
 	private static final String FIND_COMMAND = "SELECT * FROM employees_tbl WHERE id=?";
 	private static final String SELECT_ALL = "SELECT * FROM employees_tbl";
-	private static final String UPDATE = "SELECT * FROM employees_tbl WHERE id=? VALUES (?,?,?)";
+	private static final String UPDATE_COMMAND = "UPDATE employees_tbl SET name=?, department=?, daysAttended=? WHERE id=?";
 	
 	
 	public EmployeeDAOMySQLImp() {
@@ -94,11 +94,12 @@ public class EmployeeDAOMySQLImp implements EmployeeDAO {
 		int i = 0;
 		
 		try {
-			statement = conn.prepareStatement(UPDATE);
-			statement.setInt(1, e.getId());
-			statement.setString(2, e.getName());
-			statement.setString(3, e.getDepartment());
-			statement.setInt(4, e.getDaysAttended());
+			statement = conn.prepareStatement(UPDATE_COMMAND);
+			
+			statement.setString(1, e.getName());
+			statement.setString(2, e.getDepartment());
+			statement.setInt(3, e.getDaysAttended());
+			statement.setInt(4, e.getId());
 			
 			i = statement.executeUpdate();
 			

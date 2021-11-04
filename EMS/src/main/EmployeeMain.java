@@ -30,7 +30,7 @@ public class EmployeeMain {
 		}
 		
 		//delete an employee
-		eService.deleteEmployee(1111);
+		eService.deleteEmployee(3333);
 		
 		//update an employee
 		eService.updateEmployee(new Employee(2222, "Jobs", "Technology", 5));
